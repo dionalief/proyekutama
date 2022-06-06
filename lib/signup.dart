@@ -3,6 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:proyekutama/homepage.dart';
 import 'package:proyekutama/loginpage.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:proyekutama/helper.dart';
 
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({Key? key}) : super(key: key);
@@ -11,7 +14,7 @@ class SignUpScreen extends StatefulWidget {
   State<SignUpScreen> createState() => _SignUpScreenState();
 }
 
-Widget buildemail() {
+Widget buildemail(TextEditingController email) {
   return Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: <Widget>[
@@ -25,6 +28,7 @@ Widget buildemail() {
       TextField(
           keyboardType: TextInputType.emailAddress,
           style: TextStyle(color: Colors.black87),
+          controller: email,
           decoration: InputDecoration(
               contentPadding: EdgeInsets.only(top: 14),
               prefixIcon: Icon(
@@ -37,7 +41,8 @@ Widget buildemail() {
   );
 }
 
-Widget buildpassword() {
+Widget buildpassword(TextEditingController password) {
+  AuthService authService = AuthService();
   return Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: <Widget>[
@@ -49,8 +54,8 @@ Widget buildpassword() {
             fontWeight: FontWeight.w500),
       ),
       TextField(
-          obscureText: true,
           style: TextStyle(color: Colors.black87),
+          controller: password,
           decoration: InputDecoration(
               contentPadding: EdgeInsets.only(top: 14),
               prefixIcon: Icon(
@@ -63,33 +68,9 @@ Widget buildpassword() {
   );
 }
 
-Widget confirmpassword() {
-  return Column(
-    crossAxisAlignment: CrossAxisAlignment.start,
-    children: <Widget>[
-      Text(
-        'Confirm Password',
-        style: TextStyle(
-            color: Color(0xff000000),
-            fontSize: 16,
-            fontWeight: FontWeight.w500),
-      ),
-      TextField(
-          obscureText: true,
-          style: TextStyle(color: Colors.black87),
-          decoration: InputDecoration(
-              contentPadding: EdgeInsets.only(top: 14),
-              prefixIcon: Icon(
-                Icons.lock,
-                color: Color(0x80000000),
-              ),
-              hintText: 'Confirm Password',
-              hintStyle: TextStyle(color: Colors.black38))),
-    ],
-  );
-}
-
-Widget signupbt(BuildContext context) {
+Widget signupbt(BuildContext context, TextEditingController email,
+    TextEditingController password) {
+  AuthService authService = AuthService();
   return Container(
     padding: EdgeInsets.symmetric(vertical: 25),
     width: double.infinity,
@@ -109,8 +90,15 @@ Widget signupbt(BuildContext context) {
             CupertinoDialogAction(
               child: Text('OK'),
               onPressed: () {
-                Navigator.pushReplacement(context,
-                    MaterialPageRoute(builder: (context) => HomePage()));
+                if (email.text != "" && password.text != "") {
+                  authService.RegisterUser(email.text, password.text);
+                }
+                Navigator.pop(context);
+                Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(builder: (context) => HomePage()),
+                  (route) => false,
+                );
               },
             )
           ],
@@ -140,8 +128,9 @@ Widget signupbt(BuildContext context) {
 Widget loginpage(BuildContext context) {
   return GestureDetector(
     onTap: () {
-      Navigator.push(
-          context, MaterialPageRoute(builder: (context) => LoginScreen()));
+      Navigator.pop(
+        context,
+      );
     },
     child: RichText(
         text: TextSpan(children: [
@@ -162,55 +151,59 @@ Widget loginpage(BuildContext context) {
 }
 
 class _SignUpScreenState extends State<SignUpScreen> {
+  TextEditingController email = TextEditingController();
+  TextEditingController password = TextEditingController();
+  AuthService authService = AuthService();
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: AnnotatedRegion<SystemUiOverlayStyle>(
-        value: SystemUiOverlayStyle.light,
-        child: GestureDetector(
-            child: Stack(
-          children: <Widget>[
-            Container(
-              height: double.infinity,
-              width: double.infinity,
-              decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                      begin: Alignment.topCenter,
-                      end: Alignment.bottomCenter,
-                      colors: [
-                    Color(0xffffffff),
-                    Color(0xffffffff),
-                    Color(0xffffffff),
-                    Color(0xffffffff),
-                  ])),
-              child: SingleChildScrollView(
-                physics: AlwaysScrollableScrollPhysics(),
-                padding: EdgeInsets.symmetric(horizontal: 25, vertical: 120),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    Text(
-                      'Sign Up',
-                      style: TextStyle(
-                          color: Color(0xff000000),
-                          fontSize: 40,
-                          fontWeight: FontWeight.bold),
-                    ),
-                    SizedBox(height: 50),
-                    buildemail(),
-                    SizedBox(height: 80),
-                    buildpassword(),
-                    SizedBox(height: 80),
-                    confirmpassword(),
-                    SizedBox(height: 50),
-                    signupbt(context),
-                    loginpage(context)
-                  ],
+    return WillPopScope(
+      onWillPop: () async => false,
+      child: Scaffold(
+        body: AnnotatedRegion<SystemUiOverlayStyle>(
+          value: SystemUiOverlayStyle.light,
+          child: GestureDetector(
+              child: Stack(
+            children: <Widget>[
+              Container(
+                height: double.infinity,
+                width: double.infinity,
+                decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter,
+                        colors: [
+                      Color(0xffffffff),
+                      Color(0xffffffff),
+                      Color(0xffffffff),
+                      Color(0xffffffff),
+                    ])),
+                child: SingleChildScrollView(
+                  physics: AlwaysScrollableScrollPhysics(),
+                  padding: EdgeInsets.symmetric(horizontal: 25, vertical: 120),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Text(
+                        'Sign Up',
+                        style: TextStyle(
+                            color: Color(0xff000000),
+                            fontSize: 40,
+                            fontWeight: FontWeight.bold),
+                      ),
+                      SizedBox(height: 50),
+                      buildemail(email),
+                      SizedBox(height: 80),
+                      buildpassword(password),
+                      SizedBox(height: 50),
+                      signupbt(context, email, password),
+                      loginpage(context)
+                    ],
+                  ),
                 ),
-              ),
-            )
-          ],
-        )),
+              )
+            ],
+          )),
+        ),
       ),
     );
   }

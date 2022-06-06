@@ -60,6 +60,7 @@ Widget orderbtn(BuildContext context) {
 
 class _HomeCleaningState extends State<HomeCleaning> {
   int _value = 0;
+  int _price = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -75,7 +76,10 @@ class _HomeCleaningState extends State<HomeCleaning> {
               Radio(
                 value: 1,
                 groupValue: _value,
-                onChanged: (_) {
+                onChanged: (val) {
+                  if (val == 1) {
+                    _price = 20000;
+                  }
                   setState(() {
                     _value = 1;
                   });
@@ -92,7 +96,10 @@ class _HomeCleaningState extends State<HomeCleaning> {
               Radio(
                 value: 2,
                 groupValue: _value,
-                onChanged: (_) {
+                onChanged: (val) {
+                  if (val == 2) {
+                    _price = 30000;
+                  }
                   setState(() {
                     _value = 2;
                   });
@@ -109,7 +116,10 @@ class _HomeCleaningState extends State<HomeCleaning> {
               Radio(
                 value: 3,
                 groupValue: _value,
-                onChanged: (_) {
+                onChanged: (val) {
+                  if (val == 3) {
+                    _price = 40000;
+                  }
                   setState(() {
                     _value = 3;
                   });
@@ -124,6 +134,7 @@ class _HomeCleaningState extends State<HomeCleaning> {
           SizedBox(
             height: 100,
           ),
+          if (_price > 0) Text("Harga : " + _price.toString()),
           orderbtn(context)
         ],
       ),

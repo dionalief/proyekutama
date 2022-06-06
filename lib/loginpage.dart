@@ -3,13 +3,16 @@ import 'package:proyekutama/signup.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:proyekutama/helper.dart';
 
 class LoginScreen extends StatefulWidget {
   @override
   _LoginScreenState createState() => _LoginScreenState();
 }
 
-Widget buildemail() {
+Widget buildemail(TextEditingController email) {
   return Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: <Widget>[
@@ -23,6 +26,7 @@ Widget buildemail() {
       TextField(
           keyboardType: TextInputType.emailAddress,
           style: TextStyle(color: Colors.black87),
+          controller: email,
           decoration: InputDecoration(
               contentPadding: EdgeInsets.only(top: 14),
               prefixIcon: Icon(
@@ -35,7 +39,7 @@ Widget buildemail() {
   );
 }
 
-Widget buildpassword() {
+Widget buildpassword(TextEditingController password) {
   return Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: <Widget>[
@@ -49,6 +53,7 @@ Widget buildpassword() {
       TextField(
           obscureText: true,
           style: TextStyle(color: Colors.black87),
+          controller: password,
           decoration: InputDecoration(
               contentPadding: EdgeInsets.only(top: 14),
               prefixIcon: Icon(
@@ -61,29 +66,25 @@ Widget buildpassword() {
   );
 }
 
-Widget forgotpasswordbtn() {
-  return Container(
-    alignment: Alignment.centerRight,
-    child: FlatButton(
-        onPressed: () => print("Forgot Password Pressed"),
-        padding: EdgeInsets.only(right: 0),
-        child: Text(
-          'Forgot Password?',
-          style:
-              TextStyle(color: Color(0xffababab), fontWeight: FontWeight.bold),
-        )),
-  );
-}
-
-Widget loginbt(BuildContext context) {
+Widget loginbt(BuildContext context, TextEditingController email,
+    TextEditingController password) {
+  AuthService authService = AuthService();
   return Container(
     padding: EdgeInsets.symmetric(vertical: 25),
     width: double.infinity,
     child: RaisedButton(
       elevation: 5,
       onPressed: () {
-        Navigator.pushReplacement(
-            context, MaterialPageRoute(builder: (context) => HomePage()));
+        authService.loginuser(email.text, password.text).then((value) {
+          if (value) {
+            Navigator.pushReplacement(
+                context, MaterialPageRoute(builder: (context) => HomePage()));
+            return;
+          }
+
+          ScaffoldMessenger.of(context)
+              .showSnackBar(SnackBar(content: Text("Identitas Salah")));
+        });
       },
       padding: EdgeInsets.all(15),
       shape: RoundedRectangleBorder(
@@ -104,7 +105,7 @@ Widget loginbt(BuildContext context) {
 Widget signuppage(BuildContext context) {
   return GestureDetector(
     onTap: () {
-      Navigator.pushReplacement(
+      Navigator.push(
         context,
         MaterialPageRoute(builder: (context) => SignUpScreen()),
       );
@@ -128,54 +129,59 @@ Widget signuppage(BuildContext context) {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+  TextEditingController email = TextEditingController();
+  TextEditingController password = TextEditingController();
+  AuthService authService = AuthService();
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: AnnotatedRegion<SystemUiOverlayStyle>(
-        value: SystemUiOverlayStyle.light,
-        child: GestureDetector(
-            child: Stack(
-          children: <Widget>[
-            Container(
-              height: double.infinity,
-              width: double.infinity,
-              decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                      begin: Alignment.topCenter,
-                      end: Alignment.bottomCenter,
-                      colors: [
-                    Color(0xffffffff),
-                    Color(0xffffffff),
-                    Color(0xffffffff),
-                    Color(0xffffffff),
-                  ])),
-              child: SingleChildScrollView(
-                physics: AlwaysScrollableScrollPhysics(),
-                padding: EdgeInsets.symmetric(horizontal: 25, vertical: 120),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    Text(
-                      'Login',
-                      style: TextStyle(
-                          color: Color(0xff000000),
-                          fontSize: 40,
-                          fontWeight: FontWeight.bold),
-                    ),
-                    SizedBox(height: 50),
-                    buildemail(),
-                    SizedBox(height: 80),
-                    buildpassword(),
-                    SizedBox(height: 30),
-                    forgotpasswordbtn(),
-                    loginbt(context),
-                    signuppage(context)
-                  ],
+    return WillPopScope(
+      onWillPop: () async => false,
+      child: Scaffold(
+        body: AnnotatedRegion<SystemUiOverlayStyle>(
+          value: SystemUiOverlayStyle.light,
+          child: GestureDetector(
+              child: Stack(
+            children: <Widget>[
+              Container(
+                height: double.infinity,
+                width: double.infinity,
+                decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter,
+                        colors: [
+                      Color(0xffffffff),
+                      Color(0xffffffff),
+                      Color(0xffffffff),
+                      Color(0xffffffff),
+                    ])),
+                child: SingleChildScrollView(
+                  physics: AlwaysScrollableScrollPhysics(),
+                  padding: EdgeInsets.symmetric(horizontal: 25, vertical: 120),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Text(
+                        'Login',
+                        style: TextStyle(
+                            color: Color(0xff000000),
+                            fontSize: 40,
+                            fontWeight: FontWeight.bold),
+                      ),
+                      SizedBox(height: 50),
+                      buildemail(email),
+                      SizedBox(height: 80),
+                      buildpassword(password),
+                      SizedBox(height: 30),
+                      loginbt(context, email, password),
+                      signuppage(context)
+                    ],
+                  ),
                 ),
-              ),
-            )
-          ],
-        )),
+              )
+            ],
+          )),
+        ),
       ),
     );
   }

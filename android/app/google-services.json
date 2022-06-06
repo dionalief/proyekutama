@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "886060464927",
+    "project_id": "proyekutama-c7123",
+    "storage_bucket": "proyekutama-c7123.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:886060464927:android:93a6b102cda43e7a774e2a",
+        "android_client_info": {
+          "package_name": "com.example.proyekutama"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "886060464927-l2bjh6e3rdaddpjr7ku0aks3tpnp1ds2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCC_AKPgw8kNj9XI0DiNhzF-wnseSZq6X4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "886060464927-l2bjh6e3rdaddpjr7ku0aks3tpnp1ds2.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

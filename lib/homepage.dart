@@ -88,32 +88,6 @@ class HomePage extends StatelessWidget {
               Material(
                 child: InkWell(
                     onTap: () {
-                      print('History Clicked');
-                    },
-                    child: Container(
-                      padding: const EdgeInsets.all(8),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(
-                            Icons.history,
-                            size: 50,
-                            color: Colors.white,
-                          ),
-                          Text(
-                            'History',
-                            style: TextStyle(color: Colors.white, fontSize: 30),
-                          )
-                        ],
-                      ),
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(15),
-                          color: Color(0xff11B5FC)),
-                    )),
-              ),
-              Material(
-                child: InkWell(
-                    onTap: () {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
@@ -195,16 +169,13 @@ class HomePage extends StatelessWidget {
                     ],
                   )),
               ListTile(
-                title: const Text('Bahasa'),
-                onTap: () {
-                  print('Bahasa clicked');
-                },
-              ),
-              ListTile(
                 title: const Text('Log Out'),
                 onTap: () {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => LoginScreen()));
+                  Navigator.pushAndRemoveUntil(
+                    context,
+                    MaterialPageRoute(builder: (context) => LoginScreen()),
+                    (route) => false,
+                  );
                 },
               ),
             ],
