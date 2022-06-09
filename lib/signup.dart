@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -6,6 +7,7 @@ import 'package:proyekutama/loginpage.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:proyekutama/helper.dart';
+import 'package:proyekutama/usertable.dart';
 
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({Key? key}) : super(key: key);
@@ -92,6 +94,8 @@ Widget signupbt(BuildContext context, TextEditingController email,
               onPressed: () {
                 if (email.text != "" && password.text != "") {
                   authService.RegisterUser(email.text, password.text);
+                  final data = Data(email: email.text, password: password.text);
+                  createdata(data);
                 }
                 Navigator.pop(context);
                 Navigator.pushAndRemoveUntil(
@@ -207,4 +211,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
       ),
     );
   }
+}
+
+Future createdata(Data data) async {
+  final docData = FirebaseFirestore.instance.collection("user").doc();
+  final json = data.toJson();
+  docData.set(json);
 }

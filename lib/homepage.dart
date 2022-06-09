@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:flutter/services.dart';
@@ -5,6 +6,7 @@ import 'package:proyekutama/camerafeature.dart';
 import 'package:proyekutama/commercialcleaning.dart';
 import 'package:proyekutama/homecleaning.dart';
 import 'package:proyekutama/mapsfeature.dart';
+import 'package:proyekutama/usertable.dart';
 
 import 'loginpage.dart';
 
@@ -170,6 +172,16 @@ class HomePage extends StatelessWidget {
                   )),
               ListTile(
                 title: const Text('Log Out'),
+                onTap: () {
+                  Navigator.pushAndRemoveUntil(
+                    context,
+                    MaterialPageRoute(builder: (context) => LoginScreen()),
+                    (route) => false,
+                  );
+                },
+              ),
+              ListTile(
+                title: const Text('Akun'),
                 onTap: () {
                   Navigator.pushAndRemoveUntil(
                     context,

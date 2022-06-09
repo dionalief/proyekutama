@@ -60,12 +60,13 @@ Widget orderbtn(BuildContext context) {
 
 class _CommercialCleaningState extends State<CommercialCleaning> {
   int _value = 0;
+  int _price = 0;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Commercial Cleaning"),
+        title: Text("Home Cleaning"),
       ),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -75,7 +76,10 @@ class _CommercialCleaningState extends State<CommercialCleaning> {
               Radio(
                 value: 1,
                 groupValue: _value,
-                onChanged: (_) {
+                onChanged: (val) {
+                  if (val == 1) {
+                    _price = 50000;
+                  }
                   setState(() {
                     _value = 1;
                   });
@@ -92,7 +96,10 @@ class _CommercialCleaningState extends State<CommercialCleaning> {
               Radio(
                 value: 2,
                 groupValue: _value,
-                onChanged: (_) {
+                onChanged: (val) {
+                  if (val == 2) {
+                    _price = 60000;
+                  }
                   setState(() {
                     _value = 2;
                   });
@@ -109,7 +116,10 @@ class _CommercialCleaningState extends State<CommercialCleaning> {
               Radio(
                 value: 3,
                 groupValue: _value,
-                onChanged: (_) {
+                onChanged: (val) {
+                  if (val == 3) {
+                    _price = 80000;
+                  }
                   setState(() {
                     _value = 3;
                   });
@@ -124,6 +134,7 @@ class _CommercialCleaningState extends State<CommercialCleaning> {
           SizedBox(
             height: 100,
           ),
+          if (_price > 0) Text("Harga : " + _price.toString()),
           orderbtn(context)
         ],
       ),
