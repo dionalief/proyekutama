@@ -79,39 +79,44 @@ Widget signupbt(BuildContext context, TextEditingController email,
     child: RaisedButton(
       elevation: 5,
       onPressed: () {
-        CupertinoAlertDialog alert = CupertinoAlertDialog(
-          title: Text(
-            'Success!',
-            textAlign: TextAlign.center,
-          ),
-          content: Text(
-            'Your account has been registered.',
-            textAlign: TextAlign.center,
-          ),
-          actions: [
-            CupertinoDialogAction(
-              child: Text('OK'),
-              onPressed: () {
-                if (email.text != "" && password.text != "") {
-                  authService.RegisterUser(email.text, password.text);
-                  final data = Data(email: email.text, password: password.text);
-                  createdata(data);
-                }
-                Navigator.pop(context);
-                Navigator.pushAndRemoveUntil(
-                  context,
-                  MaterialPageRoute(builder: (context) => HomePage()),
-                  (route) => false,
-                );
-              },
-            )
-          ],
-        );
-        showDialog(
-            context: context,
-            builder: (BuildContext context) {
-              return alert;
-            });
+        if (email.text != "" && password.text != "") {
+          CupertinoAlertDialog alert = CupertinoAlertDialog(
+            title: Text(
+              'Success!',
+              textAlign: TextAlign.center,
+            ),
+            content: Text(
+              'Your account has been registered.',
+              textAlign: TextAlign.center,
+            ),
+            actions: [
+              CupertinoDialogAction(
+                child: Text('OK'),
+                onPressed: () {
+                  if (email.text != "" && password.text != "") {
+                    authService.RegisterUser(email.text, password.text);
+                    final data =
+                        Data(email: email.text, password: password.text);
+                    createdata(data);
+                    Navigator.pop(context);
+                    Navigator.pushAndRemoveUntil(
+                      context,
+                      MaterialPageRoute(builder: (context) => HomePage()),
+                      (route) => false,
+                    );
+                  }
+                },
+              )
+            ],
+          );
+          showDialog(
+              context: context,
+              builder: (BuildContext context) {
+                return alert;
+              });
+        }
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text("Data tidak boleh kosong")));
       },
       padding: EdgeInsets.all(15),
       shape: RoundedRectangleBorder(

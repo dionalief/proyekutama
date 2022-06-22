@@ -1,6 +1,9 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:proyekutama/cctable.dart';
 import 'package:proyekutama/homepage.dart';
 
 class CommercialCleaning extends StatefulWidget {
@@ -10,37 +13,111 @@ class CommercialCleaning extends StatefulWidget {
   State<CommercialCleaning> createState() => _CommercialCleaningState();
 }
 
-Widget orderbtn(BuildContext context) {
+Widget orderbtn(BuildContext context, int _value, int _price) {
+  print(_value);
   return Container(
     padding: EdgeInsets.symmetric(vertical: 25),
     width: 300,
     child: RaisedButton(
       elevation: 5,
       onPressed: () {
-        CupertinoAlertDialog alert = CupertinoAlertDialog(
-          title: Text(
-            'Success!',
-            textAlign: TextAlign.center,
-          ),
-          content: Text(
-            'Pesanan anda telah diproses.',
-            textAlign: TextAlign.center,
-          ),
-          actions: [
-            CupertinoDialogAction(
-              child: Text('OK'),
-              onPressed: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => HomePage()));
-              },
-            )
-          ],
-        );
-        showDialog(
-            context: context,
-            builder: (BuildContext context) {
-              return alert;
-            });
+        if (_value == 0) {
+          ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text("Pilih paket yang tersedia")));
+        }
+        if (_value == 1) {
+          CupertinoAlertDialog alert = CupertinoAlertDialog(
+            title: Text(
+              'Success!',
+              textAlign: TextAlign.center,
+            ),
+            content: Text(
+              'Pesanan anda telah diproses.',
+              textAlign: TextAlign.center,
+            ),
+            actions: [
+              CupertinoDialogAction(
+                child: Text('OK'),
+                onPressed: () {
+                  createdata(CCTable(
+                      email: FirebaseAuth.instance.currentUser!.email!,
+                      packet: "CC1",
+                      price: _price,
+                      value: _value));
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => HomePage()));
+                },
+              )
+            ],
+          );
+          showDialog(
+              context: context,
+              builder: (BuildContext context) {
+                return alert;
+              });
+        }
+        if (_value == 2) {
+          CupertinoAlertDialog alert = CupertinoAlertDialog(
+            title: Text(
+              'Success!',
+              textAlign: TextAlign.center,
+            ),
+            content: Text(
+              'Pesanan anda telah diproses.',
+              textAlign: TextAlign.center,
+            ),
+            actions: [
+              CupertinoDialogAction(
+                child: Text('OK'),
+                onPressed: () {
+                  createdata(CCTable(
+                      email: FirebaseAuth.instance.currentUser!.email!,
+                      packet: "CC2",
+                      price: _price,
+                      value: _value));
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => HomePage()));
+                },
+              )
+            ],
+          );
+          showDialog(
+              context: context,
+              builder: (BuildContext context) {
+                return alert;
+              });
+        }
+        if (_value == 3) {
+          CupertinoAlertDialog alert = CupertinoAlertDialog(
+            title: Text(
+              'Success!',
+              textAlign: TextAlign.center,
+            ),
+            content: Text(
+              'Pesanan anda telah diproses.',
+              textAlign: TextAlign.center,
+            ),
+            actions: [
+              CupertinoDialogAction(
+                child: Text('OK'),
+                onPressed: () {
+                  createdata(CCTable(
+                      email: FirebaseAuth.instance.currentUser!.email!,
+                      packet: "CC3",
+                      price: _price,
+                      value: _value));
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => HomePage()));
+                },
+              )
+            ],
+          );
+          showDialog(
+              context: context,
+              builder: (BuildContext context) {
+                return alert;
+              });
+        }
       },
       padding: EdgeInsets.all(15),
       shape: RoundedRectangleBorder(
@@ -66,7 +143,7 @@ class _CommercialCleaningState extends State<CommercialCleaning> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Home Cleaning"),
+        title: Text("Commercial Cleaning"),
       ),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -135,9 +212,15 @@ class _CommercialCleaningState extends State<CommercialCleaning> {
             height: 100,
           ),
           if (_price > 0) Text("Harga : " + _price.toString()),
-          orderbtn(context)
+          orderbtn(context, _value, _price)
         ],
       ),
     );
   }
+}
+
+Future createdata(CCTable data) async {
+  final docData = FirebaseFirestore.instance.collection("ccttable").doc();
+  final json = data.toJson();
+  docData.set(json);
 }

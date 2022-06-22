@@ -1,11 +1,14 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:flutter/services.dart';
 import 'package:proyekutama/camerafeature.dart';
 import 'package:proyekutama/commercialcleaning.dart';
 import 'package:proyekutama/homecleaning.dart';
+import 'package:proyekutama/homepage.dart';
 import 'package:proyekutama/mapsfeature.dart';
+import 'package:proyekutama/usertable.dart';
 
 class InfoAkun extends StatefulWidget {
   const InfoAkun({Key? key}) : super(key: key);
@@ -17,28 +20,32 @@ class InfoAkun extends StatefulWidget {
 class InfoAkunState extends State<InfoAkun> {
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        Text(
-          'Email',
-          style: TextStyle(
-              color: Color.fromARGB(255, 0, 0, 0),
-              fontSize: 16,
-              fontWeight: FontWeight.w500),
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("Akun"),
+        leading: new IconButton(
+          icon: new Icon(Icons.arrow_back, color: Colors.white),
+          onPressed: () => Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(builder: (context) => HomePage()),
+              (route) => false),
         ),
-        TextField(
-            keyboardType: TextInputType.emailAddress,
-            style: TextStyle(color: Colors.black87),
-            decoration: InputDecoration(
-                contentPadding: EdgeInsets.only(top: 14),
-                prefixIcon: Icon(
-                  Icons.email,
-                  color: Color(0x80000000),
-                ),
-                hintText: 'Email',
-                hintStyle: TextStyle(color: Colors.black38))),
-      ],
+      ),
+      body: ListView(
+        children: [
+          ListTile(
+            leading: Icon(Icons.email_outlined),
+            title: Text(FirebaseAuth.instance.currentUser!.email!),
+          )
+        ],
+      ),
     );
   }
 }
+
+Stream<List<Data>> readData() => FirebaseFirestore.instance
+    .collection("user")
+    .where("Email", isEqualTo: FirebaseAuth.instance.currentUser!.email!)
+    .snapshots()
+    .map((snapshots) =>
+        snapshots.docs.map((doc) => Data.fromJson(doc.data())).toList());

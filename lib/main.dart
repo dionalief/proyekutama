@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:proyekutama/helper.dart';
 import 'package:proyekutama/homecleaning.dart';
 import 'package:proyekutama/homepage.dart';
+import 'package:proyekutama/infoakun.dart';
 import 'package:proyekutama/loginpage.dart';
 import 'package:proyekutama/signup.dart';
 import 'package:proyekutama/mapsfeature.dart';
