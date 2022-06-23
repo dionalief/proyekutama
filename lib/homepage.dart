@@ -148,34 +148,6 @@ class HomePage extends StatelessWidget {
                           color: Color(0xff11B5FC)),
                     )),
               ),
-              Material(
-                child: InkWell(
-                    onTap: () {
-                      Navigator.push(context,
-                          MaterialPageRoute(builder: (context) => HomePage()));
-                    },
-                    child: Container(
-                      padding: const EdgeInsets.all(8),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(
-                            Icons.chat_rounded,
-                            size: 50,
-                            color: Colors.white,
-                          ),
-                          Text(
-                            'Suggestion',
-                            style: TextStyle(color: Colors.white, fontSize: 30),
-                            textAlign: TextAlign.center,
-                          )
-                        ],
-                      ),
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(15),
-                          color: Color(0xff11B5FC)),
-                    )),
-              ),
             ]),
         drawer: Drawer(
           child: ListView(

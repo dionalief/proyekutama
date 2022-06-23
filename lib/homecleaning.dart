@@ -44,8 +44,10 @@ Widget orderbtn(BuildContext context, int _value, int _price) {
                       packet: "HC1",
                       price: _price,
                       value: _value));
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => HomePage()));
+                  Navigator.pushAndRemoveUntil(
+                      context,
+                      MaterialPageRoute(builder: (context) => HomePage()),
+                      (Route<dynamic> route) => false);
                 },
               )
             ],
@@ -75,8 +77,10 @@ Widget orderbtn(BuildContext context, int _value, int _price) {
                       packet: "HC2",
                       price: _price,
                       value: _value));
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => HomePage()));
+                  Navigator.pushAndRemoveUntil(
+                      context,
+                      MaterialPageRoute(builder: (context) => HomePage()),
+                      (route) => false);
                 },
               )
             ],
@@ -106,8 +110,10 @@ Widget orderbtn(BuildContext context, int _value, int _price) {
                       packet: "HC3",
                       price: _price,
                       value: _value));
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => HomePage()));
+                  Navigator.pushAndRemoveUntil(
+                      context,
+                      MaterialPageRoute(builder: (context) => HomePage()),
+                      (route) => false);
                 },
               )
             ],
