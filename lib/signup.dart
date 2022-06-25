@@ -56,6 +56,7 @@ Widget buildpassword(TextEditingController password) {
             fontWeight: FontWeight.w500),
       ),
       TextField(
+          obscureText: true,
           style: TextStyle(color: Colors.black87),
           controller: password,
           decoration: InputDecoration(
